@@ -73,7 +73,7 @@ async def upload_and_vectorize_pdf(file: UploadFile = File(...)):
         # 2. Cargar el documento PDF y dividirlo en chunks.
         loader = PyPDFLoader(temp_file_path)
         pages = loader.load_and_split()
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=125)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=600, chunk_overlap=300)
         chunks = text_splitter.split_documents(pages)
         
         if not chunks:
@@ -106,21 +106,19 @@ class QueryBody(BaseModel):
 @app.post("/query")
 async def query_agent(body: QueryBody):
     """
-    Endpoint para hacer preguntas al agente. Requiere un ID de conversación (thread_id)
-    para mantener la memoria y una pregunta (query).
+    Endpoint para hacer preguntas al agente. Usa .invoke() para obtener la respuesta final.
     """
     config = {"configurable": {"thread_id": body.thread_id}}
     
     try:
-        response_content = ""
-        # Invocamos el agente y hacemos stream de los eventos para obtener la respuesta final.
-        events = workflow.stream({"messages": [("user", body.query)]}, config)
-        for event in events:
-            # La respuesta final del agente se encuentra en el contenido del último mensaje.
-            if "messages" in event:
-                 response_content = event["messages"][-1].content
+        # Usamos .invoke() que espera hasta que el grafo termine y devuelve el estado final.
+        final_state = await workflow.ainvoke({"messages": [("user", body.query)]}, config)
+        
+        # La respuesta para el usuario es el contenido del último mensaje en el estado final.
+        response_content = final_state["messages"][-1].content
         
         return {"response": response_content}
+
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Ocurrió un error al invocar al agente: {e}")
 # --- BLOQUE PARA EJECUCIÓN DIRECTA ---

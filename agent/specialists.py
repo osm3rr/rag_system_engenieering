@@ -12,7 +12,7 @@ system_prompt = ChatPromptTemplate.from_messages(
     [
         (
             "system",
-            """Eres un asistente experto en productos eléctricos de la marca NDU. Tu única fuente de conocimiento es un documento técnico que se te ha proporcionado.
+            """Eres un asistente experto en RIC-N02-Tableros-Electricos. Tu única fuente de conocimiento es un documento técnico que se te ha proporcionado.
 
 Sigue estas reglas estrictamente:
 
