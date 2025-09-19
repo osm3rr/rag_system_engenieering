@@ -73,7 +73,7 @@ async def upload_and_vectorize_pdf(file: UploadFile = File(...)):
         # 2. Cargar el documento PDF y dividirlo en chunks.
         loader = PyPDFLoader(temp_file_path)
         pages = loader.load_and_split()
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size=600, chunk_overlap=300)
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=1774, chunk_overlap=225)
         chunks = text_splitter.split_documents(pages)
         
         if not chunks:
