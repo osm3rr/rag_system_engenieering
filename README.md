@@ -42,7 +42,7 @@ rag_system_engenieering/
 ## Uso
 Ejecuta la aplicación principal:
 ```bash
-python app.py
+streamlit run app.py
 ```
 
 ## Dependencias principales
