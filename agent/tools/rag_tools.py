@@ -6,7 +6,7 @@ from langchain_community.vectorstores import FAISS
 # Importacion de instancia desde config
 from agent.config import embeddings_cohere
 
-VECTOR_STORE_PATH = "vector_store"
+VECTOR_STORE_PATH = "vector_stores"
 
 def crear_herramienta_rag(nombre_documento: str, descripcion: str) -> BaseTool:
     """
@@ -16,9 +16,7 @@ def crear_herramienta_rag(nombre_documento: str, descripcion: str) -> BaseTool:
 
     @tool
     def pdf_search(query: str):
-        # --- ¡DOCSTRING AÑADIDO AQUÍ! ---
         """Busca información en el documento especificado para responder a la consulta del usuario."""
-        # ---------------------------------
         ruta_vector_store = os.path.join(VECTOR_STORE_PATH, nombre_documento)
         print(f"--- Herramienta RAG ({nombre_documento}): Buscando '{query}' ---")
 
@@ -38,10 +36,10 @@ def crear_herramienta_rag(nombre_documento: str, descripcion: str) -> BaseTool:
 
 herramienta_doc_01 = crear_herramienta_rag(
     nombre_documento="documento_01", 
-    descripcion="Busca en el documento 01, que es una guia de peliculas"
+    descripcion="Busca en el documento 01, que es un directorio de proyectos"
 )
 
 herramienta_doc_02 = crear_herramienta_rag(
     nombre_documento="documento_02",
-    descripcion="Busca en el documento 02, que es una guia de series"
+    descripcion="Busca en el documento 02, que es un manual de procedimientos"
 )
